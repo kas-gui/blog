@@ -1,0 +1,315 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Line wrapping - KAS blog</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="why-kas-text.html"><strong aria-hidden="true">1.</strong> Why KAS-text</a></li><li class="chapter-item expanded "><a href="line-wrapping.html" class="active"><strong aria-hidden="true">2.</strong> Line wrapping</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">KAS blog</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#line-wrapping-the-hardest-problem-in-text-layout" id="line-wrapping-the-hardest-problem-in-text-layout">Line wrapping: the hardest problem in text layout?</a></h1>
+<p>September 2020</p>
+<p><em>Obviously</em> the title can't be true. Can it?</p>
+<p>Unicode provides a <del>short</del> somewhat long <a href="https://www.unicode.org/reports/tr14/">technical report on line breaking</a>.
+To quote from its overview:</p>
+<blockquote>
+<p>Line breaking, also known as word wrapping, is the process of breaking a section of text into lines such that it will fit in the available width of a page, window or other display area. The Unicode Line Breaking Algorithm performs part of this process. Given an input text, it produces a set of positions called &quot;break opportunities&quot; that are appropriate points to begin a new line. The selection of actual line break positions from the set of break opportunities is not covered by the Unicode Line Breaking Algorithm, but is in the domain of higher level software with knowledge of the available width and the display size of the text.</p>
+</blockquote>
+<p>To summarise, this algorithm tells us about mandatory breaks (e.g. after <code>\n</code>)
+and optional breaks (roughly speaking, the start of each word).</p>
+<p>Fortunately for us, the Unicode Line Breaking Algorithm has already been
+implemented in Rust, by the <a href="https://docs.rs/xi-unicode/0.2.1/xi_unicode/"><code>xi-unicode</code></a>
+library (from the same people as <a href="https://github.com/xi-editor/xi-editor">Xi Editor</a>
+and <a href="https://github.com/linebender/druid">Druid</a>).</p>
+<h2><a class="header" href="#one-foot-in-front-of-the-other" id="one-foot-in-front-of-the-other">One foot in front of the other</a></h2>
+<p><img src="https://www.freetype.org/freetype2/docs/glyphs/metrics.png" alt="glyph metrics" /></p>
+<p>Lets start with the basics: horizontal, left-to-right text with simple layout.
+In this case, we use a <em>caret</em> starting at the line's origin. The first glyph is
+placed on this caret, then the caret is advanced by the glyph's advance width.
+The next glyph is placed similarly, except that if this pair of glyphs appears
+in the font's <em>kerning table</em>, then an offset is applied (this allows e.g. the
+'T' in 'To' to hang over the 'o').</p>
+<p>Line wrapping such text is simple: whenever the caret position extends beyond
+the available width, we back-step to the last optional line-break position, and
+line-break there. Well, not quite: we allow whitespace to extend beyond the
+line width (so if a bunch of extra spaces are inserted at the point a line is
+wrapped, they don't actually add space anywhere).</p>
+<p>The above is what the <code>glyph_brush_layout</code> crate (of
+<a href="https://github.com/alexheretic/glyph-brush">glyph-brush</a>) does. It works fine
+for most left-to-right languages, provided no complicated layout is needed.</p>
+<p>Actually, there is another point missing from this story: hyphenation.
+We leave this as a foot-note for now.</p>
+<h2><a class="header" href="#shaping" id="shaping">Shaping</a></h2>
+<p>Shaping was <a href="why-kas-text.html#shaping">discussed previously</a> and is an essential
+part of complex text support: the above advance-and-apply-kerning rules are
+insufficient for ligatures and entirely insufficient for complex texts like Arabic.
+A <em>shaper</em> is a separate tool which, given a sequence of
+(Unicode) text and a font, returns a list of positioned glyphs from this font.
+One such shaper is <a href="https://harfbuzz.github.io/">HarfBuzz</a>.</p>
+<p>Modifying our text layout system to support a shaper is not so hard (given a
+suitable design). Integrating line wrapping with an external shaper is only a
+little harder: the shaper returns a <em>single</em> line of text, within which we must
+track the positions of optional line-breaks.</p>
+<p>KAS-text implements support for both simple layout (directly) and complex layout
+(via <a href="https://docs.rs/harfbuzz-rs">`harfbuzz-rs</a>) within its
+<a href="https://github.com/kas-gui/kas-text/blob/master/src/shaper.rs">shaper module</a>.</p>
+<h2><a class="header" href="#right-to-left-and-bi-directional-text" id="right-to-left-and-bi-directional-text">Right-to-left and bi-directional text</a></h2>
+<p>This is where things start to get <em>fun</em>. When going left-to-right (hereafter
+LTR), we only need to implement the caret position. When going RTL, if only we
+could simply use the same logic but with flipped direction: alas, all font
+glyphs are positioned <em>from the left</em>, so we have to typeset them <em>backwards</em>.</p>
+<p>Worse, RTL texts may embed short sequences (such as numbers) or even quote
+another language in the LTR direction — in some cases even embedding RTL text
+within LTR within RTL. <a href="https://www.unicode.org/reports/tr9/">Unicode TR9</a>
+specifies the <em>Basic Display Algorithm</em>, which essentially has three parts:</p>
+<ol>
+<li>Split the input text into paragraphs (trivial).</li>
+<li>Resolve embedding levels, where levels run from 0 to 125 and odd levels
+indicate RTL direction. This is complex but well specified and implemented
+by libraries such as <a href="http://docs.rs/unicode-bidi">unicode-bidi</a> (albeit
+with bugs).</li>
+<li>Re-order the text. This is complex and inseperable from line-wrapping.</li>
+</ol>
+<p>To go into further detail, according to Unicode TR9, re-ordering text involves:</p>
+<ol>
+<li>Split the input text into <em>level runs</em>: maximal sub-sets of characters with
+consistent embedding level.</li>
+<li>For each level run, apply shaping to yield a glyph sequence.</li>
+<li>Using the result of shaping, calculate line-wrapping positions.</li>
+<li>For each line, apply a sequence of rules (L1-L4) to re-order
+characters on that line.</li>
+</ol>
+<p>Unfortunately this leaves us a problem: we cannot resolve where lines start and
+end without first applying shaping, and we but are given a set of rules to
+re-order characters (i.e. Unicode code points) not glyphs. There are two ways
+of, er, &quot;solving&quot;, this problem:</p>
+<ol>
+<li>Apply shaping, calculate line-break positions, re-order (at <code>char</code> level),
+shape again. Not only does this require doing shaping twice, but further
+there is no guarantee that the result of doing so will still fit within our
+length bounds. Also, shapers like HarfBuzz expect text in <em>logical</em> order.</li>
+<li>Transform the re-ordering logic to work with glyph sequences instead of
+characters. HarfBuzz has implicit support for RTL text, so we never re-order
+<em>characters</em>, but only <em>runs</em> and only then at embedding level 2 and higher.</li>
+</ol>
+<p>Option (2) is now the obvious choice, but there are still several details to
+work out: line-wrapping both LTR and RTL text, correctly applying alignment,
+embedding LTR within RTL and vice-versa, and a few corner cases. Each line has
+a dominant (initial) direction (which may not be the same as the paragraph
+direction). On that line one may append a whole run (in either direction) or
+part of a wrapped line — but since the logical end of a line should not be in
+its middle we only allow line wrapping when the run direction matches the line
+direction. [This may need adjustment.]</p>
+<h2><a class="header" href="#summary" id="summary">Summary</a></h2>
+<p>As we have seen, line-wrapping is only a small problem within the scope of text
+layout, but surprisingly complex in practice due to its inherent
+inseperability from other aspects of text layout.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="why-kas-text.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="why-kas-text.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
