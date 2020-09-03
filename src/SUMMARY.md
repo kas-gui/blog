@@ -1,3 +1,4 @@
 # Summary
 
-- [Chapter 1](./chapter_1.md)
+- [Why KAS-text](why-kas-text.md)
+- [Line wrapping](line-wrapping.md)
