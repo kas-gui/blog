@@ -91,7 +91,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Index</a></li><li class="chapter-item expanded "><a href="why-kas-text.html"><strong aria-hidden="true">2.</strong> Why KAS-text</a></li><li class="chapter-item expanded "><a href="line-wrapping.html"><strong aria-hidden="true">3.</strong> Line wrapping</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Index</a></li><li class="chapter-item expanded "><a href="why-kas-text.html"><strong aria-hidden="true">2.</strong> Why KAS-text</a></li><li class="chapter-item expanded "><a href="line-wrapping.html"><strong aria-hidden="true">3.</strong> Line wrapping</a></li><li class="chapter-item expanded "><a href="easy-cast.html"><strong aria-hidden="true">4.</strong> Easy Cast</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -385,6 +385,176 @@ direction. [This may need adjustment.]</p>
 <p>As we have seen, line-wrapping is only a small problem within the scope of text
 layout, but surprisingly complex in practice due to its inherent
 inseperability from other aspects of text layout.</p>
+<h1><a class="header" href="#easy-cast" id="easy-cast">Easy Cast</a></h1>
+<p>Introducing: <a href="https://crates.io/crates/easy-cast">easy-cast</a>.</p>
+<h2><a class="header" href="#problem-correct-casts-arent-easy" id="problem-correct-casts-arent-easy">Problem: correct casts aren't easy</a></h2>
+<p>Let me ask you, have you ever done this?</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let v: Vec&lt;_&gt; = make_collection();
+
+// We need a fixed-size type (not usize), or just want to save space.
+// We can assume length &lt;= u32::MAX.
+let len = v.len() as u32;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Of course, you could write this instead:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let v: Vec&lt;_&gt; = make_collection();
+
+// We need a fixed-size type (not usize), or just want to save space.
+use std::convert::TryFrom;
+let len = u32::try_from(v.len()).unwrap();
+<span class="boring">}
+</span></code></pre></pre>
+<p>What about this?</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x: f32 = some_position();
+
+// Convert to the nearest integer, assuming it fits
+let x = (x.round()) as i32;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Or this?</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use rand_distr::{Poisson, Distribution};
+let distr = Poisson::new(1e6).unwrap();
+let num = poi.sample(&amp;mut rand::thread_rng());
+
+// Note: u64::MAX as f64 rounds to 2^64, so we need to use &lt; not &lt;= here!
+assert!(0.0 &lt;= num &amp;&amp; num &lt; u64::MAX as f64);
+let num = num as u64;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Or even this?</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x: i32 = some_value();
+let y = x as f32;
+if y as i32 == x {
+    println!(&quot;No loss of precision!&quot;);
+    // WARNING: this test is WRONG since e.g. i32::MAX rounds to 2^31 on cast
+    // to f32, then rounds back to i32::MAX on cast to i32.
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h3><a class="header" href="#summary-1" id="summary-1">Summary</a></h3>
+<p>It should be <em>easy</em> and <em>safe</em> to convert one numeric type to
+another, but frequently it's not:</p>
+<ul>
+<li>Using <code>x as T</code> is easy but not <em>safe</em>: it may truncate, sign-convert, round,
+or saturate. (Before <a href="https://github.com/rust-lang/rust/blob/stable/RELEASES.md#version-1450-2020-07-16">Rust 1.45.0</a> behaviour might even be undefined.)</li>
+<li>Using <code>T::try_from(x).unwrap()</code> is <em>clunky</em> when you expect the conversion
+to succeed.</li>
+<li><code>TryFrom</code> doesn't even <em>support</em> float conversions.</li>
+<li>Conceptually, &quot;convert a float to the nearest integer&quot; is a <em>single</em>
+operation, yet most solutions require separate rounding and conversion steps.</li>
+</ul>
+<p>It turns out this is not an easy problem to solve <em>in general</em>. I wrote
+<a href="https://github.com/rust-lang/rfcs/pull/2484">an RFC</a> on this. Nearly three
+years and a long discussion later, it's still unsolved.</p>
+<h3><a class="header" href="#existing-solutions" id="existing-solutions">Existing solutions</a></h3>
+<p>The standard library provides:</p>
+<ul>
+<li><code>From</code>, but it only covers portably infallible conversions</li>
+<li><code>TryFrom</code>, but it misses float conversions and expects you to do your own
+error handling</li>
+</ul>
+<p>There are existing libraries on <code>crates.io</code>, yet all of them fall short in some way:</p>
+<ul>
+<li><a href="https://docs.rs/num-traits/0.2.14/num_traits/cast/trait.NumCast.html">num_traits::NumCast</a>:
+API is not extensible to user types; error handling is the user's responsibility;
+it's a relatively big library if you just want casts</li>
+<li><a href="https://docs.rs/cast/">cast</a>: different API for fallible and infallible
+conversions; API around <code>isize</code> and <code>usize</code> is platform-dependent;
+error handling is the user's responsibility</li>
+</ul>
+<h2><a class="header" href="#introducing-easy-cast" id="introducing-easy-cast">Introducing easy-cast</a></h2>
+<p>Eventually I gave up trying to find a standard solution and wrote my own,
+starting with one particular problem (converting between <code>usize</code> and <code>u32</code>
+indices in KAS-text, which stores <em>many</em> text and list indices). This tiny
+beginning grew into the <a href="https://crates.io/crates/easy-cast">easy-cast</a> library:</p>
+<ul>
+<li>a <code>From</code>-like trait, <a href="https://docs.rs/easy-cast/latest/easy_cast/trait.Conv.html"><code>Conv</code></a>, for all integer conversions</li>
+<li>direct support for float-to-int-with-rounding via <a href="https://docs.rs/easy-cast/latest/easy_cast/trait.ConvFloat.html"><code>ConvFloat</code></a></li>
+<li>easier usage via the <a href="https://docs.rs/easy-cast/latest/easy_cast/trait.Cast.html"><code>Cast</code></a> trait (like <code>Into</code>)</li>
+<li><code>try_cast</code> and <code>try_conv</code>, allowing user error handling on all conversions</li>
+<li>and of course a few bug fixes and diagnostic improvements</li>
+</ul>
+<h3><a class="header" href="#examples" id="examples">Examples</a></h3>
+<p>Now, we can revisit the above problems using <code>easy-cast</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use easy_cast::Conv;
+
+let v: Vec&lt;_&gt; = make_collection();
+// Expect success, panic on failure
+let len = u32::conv(v.len());
+<span class="boring">}
+</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use easy_cast::CastFloat;
+
+let x: f32 = some_position();
+// Convert to the nearest integer, panic if out-of-range
+let x: i32 = x.cast_nearest();
+<span class="boring">}
+</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use easy_cast::CastFloat;
+
+use rand_distr::{Poisson, Distribution};
+let distr = Poisson::new(1e6).unwrap();
+let num = poi.sample(&amp;mut rand::thread_rng());
+
+let num: u64 = num.cast_trunc();
+<span class="boring">}
+</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use easy_cast::Conv;
+
+let x: i32 = some_value();
+if let Ok(y) = f32::try_conv(x) {
+    println!(&quot;No loss of precision!&quot;);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>For any integer <code>x</code> and any integer or float type <code>T</code>, we get:</p>
+<ul>
+<li><code>T::conv(x)</code></li>
+<li><code>x.cast()</code> with type inference</li>
+<li><code>T::try_conv(x)</code> and <code>x.try_cast()</code> returning <code>Result&lt;T, Error&gt;</code></li>
+</ul>
+<p>And for any float value <code>x</code> and integer type <code>T</code> we have:</p>
+<ul>
+<li><code>x.cast_nearest()</code>, <code>x.cast_trunc()</code>, <code>x.cast_floor()</code>, <code>x.cast_ceil()</code></li>
+<li><code>T::conv_nearest(x)</code>, etc.</li>
+<li><code>T::try_conv_trunc(x)</code>, <code>x.try_cast_floor()</code>, etc.</li>
+</ul>
+<h3><a class="header" href="#dont-need-the-fuses" id="dont-need-the-fuses">Don't need the fuses?</a></h3>
+<p>One of the design goals for easy-cast was <em>check everything in Debug builds,
+maybe not in Release builds</em>. In a Debug build, or when the <code>always_assert</code>
+crate feature is used, <code>cast</code> and <code>conv</code> will panic on inexact conversions.
+In Release builds without this flag, the cast reduces to just <code>x as T</code>.</p>
+<p>The same is not true for <code>try_cast</code> and <code>try_from</code> which always fail on
+inexact conversions.</p>
+<p>We may make some adjustments here in future versions, e.g. to use
+<code>always_assert</code> by default (but if so, it will be considered a breaking change).</p>
 
                     </main>
 
