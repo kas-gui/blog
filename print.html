@@ -4,16 +4,8 @@
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>KAS blog</title>
-        
         <meta name="robots" content="noindex" />
-        
-        
-
-
         <!-- Custom HTML head -->
-        
-
-
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,22 +17,15 @@
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
-
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        
         <link rel="stylesheet" href="fonts/fonts.css">
-        
-
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
-        
-
-        
     </head>
     <body>
         <!-- Provide site root to javascript -->
@@ -99,7 +84,6 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                
                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
@@ -116,11 +100,9 @@
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        
                         <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
-                        
                     </div>
 
                     <h1 class="menu-title">KAS blog</h1>
@@ -129,14 +111,12 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
-                        
                     </div>
                 </div>
 
-                
                 <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -144,8 +124,6 @@
                         </ul>
                     </div>
                 </div>
-                
-
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script type="text/javascript">
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
@@ -157,15 +135,15 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#kas-blog" id="kas-blog">KAS Blog</a></h1>
+                        <h1 id="kas-blog"><a class="header" href="#kas-blog">KAS Blog</a></h1>
 <p>Please see outline on the left.</p>
-<h1><a class="header" href="#why-i-created-kas-text" id="why-i-created-kas-text">Why I created kas-text</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="why-i-created-kas-text"><a class="header" href="#why-i-created-kas-text">Why I created kas-text</a></h1>
 <p>September 2020</p>
-<h2><a class="header" href="#existing-libraries" id="existing-libraries">Existing libraries</a></h2>
+<h2 id="existing-libraries"><a class="header" href="#existing-libraries">Existing libraries</a></h2>
 <p>This is going to be a very brief (and fairly naive) dive into text rendering and
 the state of available Rust libraries, written in easy English with minimal
 jargon.</p>
-<h3><a class="header" href="#the-basics" id="the-basics">The basics</a></h3>
+<h3 id="the-basics"><a class="header" href="#the-basics">The basics</a></h3>
 <p>Lets see. You're writing a small graphical game/tool/general UI and wish to
 print a simple string of text, say, &quot;Hello World!&quot; There are many APIs that can
 do this, but still several steps involved:</p>
@@ -185,7 +163,7 @@ all accomplish this, along with the more specialised <code>glyph_brush_layout</c
 <code>amethyst_ui</code>) provide direct text support.</li>
 </ol>
 <p>Of course, mostly you only need consider steps 1 and 5 and you're done.</p>
-<h3><a class="header" href="#wrapping-and-alignment" id="wrapping-and-alignment">Wrapping and alignment</a></h3>
+<h3 id="wrapping-and-alignment"><a class="header" href="#wrapping-and-alignment">Wrapping and alignment</a></h3>
 <p>Above, we considered only a short line of text: &quot;Hello World!&quot; Frequently you
 will have longer pieces of text that require <em>wrapping</em> (usually on word
 boundaries), and you may wish the result to be <em>aligned</em> to the left, centre or
@@ -193,7 +171,7 @@ right, or even <em>justified</em>. Fortunately the above libraries already have 
 covered (aside from justified text, which is less often supported).</p>
 <p>Text wrapping is a deceptively simple problem, but more on that in my
 <a href="line-wrapping.html">next post</a>.</p>
-<h3><a class="header" href="#shaping" id="shaping">Shaping</a></h3>
+<h3 id="shaping"><a class="header" href="#shaping">Shaping</a></h3>
 <p>The above libraries all use a fairly simple layout system: match each <code>char</code> to
 a font glyph, place this at the previous glyph's &quot;advance position&quot;, then if the
 font provides kerning data for this pair of glyphs use it to adjust the gap
@@ -211,7 +189,7 @@ used above with a <em>text shaper</em> should, in theory, be straightforward.</p
 <p>For Rust, we have the HarfBuzz binding <code>harfbuzz-rs</code>, as well as two immature
 pure-Rust libraries, <code>rustybuzz</code> and <code>allsorts</code>. Of the general-purpose text
 libraries, only <code>fontdue</code> includes shaping in its roadmap.</p>
-<h3><a class="header" href="#right-to-left-and-bidirectional-text" id="right-to-left-and-bidirectional-text">Right-to-left and bidirectional text</a></h3>
+<h3 id="right-to-left-and-bidirectional-text"><a class="header" href="#right-to-left-and-bidirectional-text">Right-to-left and bidirectional text</a></h3>
 <p>Several scripts, such as Hebrew and Arabic, are written right-to-left.
 Supporting such scripts generally also requires supporting embedded left-to-right
 fragments, and thus requires supporting <em>bidirectional</em> texts.</p>
@@ -223,7 +201,7 @@ texts into layout is not so simple (this is most of the topic of the
 <a href="line-wrapping.html">next post</a>).</p>
 <p>The <code>unicode-bidi</code> crate implements much of Unicode TR9, but on its own this
 is insufficient. <em>None</em> of the above libraries support bidirectional text.</p>
-<h3><a class="header" href="#formatting" id="formatting">Formatting</a></h3>
+<h3 id="formatting"><a class="header" href="#formatting">Formatting</a></h3>
 <p>Formatting may apply one of several effects to text. These include:</p>
 <ul>
 <li>adjusting the font size</li>
@@ -237,7 +215,7 @@ slanting glyphs during rendering)</li>
 via a list of text sections each with a font size and font identifier, and in
 some cases also colour information. The user is expected to translate formatted
 text from its source format as well as to select appropriate fonts.</p>
-<h3><a class="header" href="#font-properties-and-variable-fonts" id="font-properties-and-variable-fonts">Font properties and variable fonts</a></h3>
+<h3 id="font-properties-and-variable-fonts"><a class="header" href="#font-properties-and-variable-fonts">Font properties and variable fonts</a></h3>
 <p>When mentioning font selection above, we glossed over a couple of issues. How
 does one select an appropriate italic or bold variant? Can these be synthesised
 if not provided?</p>
@@ -250,7 +228,7 @@ or &quot;normal&quot;). The style allows selection of normal, <em>italic</em> (c
 rasteriser API supports selection of weight or style; all other Rust libraries
 select font only by path/bytes and variant index (for multiple fonts embedded
 in a font pack).</p>
-<h3><a class="header" href="#font-fallbacks" id="font-fallbacks">Font fallbacks</a></h3>
+<h3 id="font-fallbacks"><a class="header" href="#font-fallbacks">Font fallbacks</a></h3>
 <p>What if your chosen font doesn't include all required glyphs, e.g. if you choose
 a font covering most European alphabets, but your user starts writing Korean?
 I believe that no Rust libraries have even started trying to address this
@@ -262,7 +240,7 @@ On Linux this is usually handled by Fontconfig.</p>
 <p>The other sub-problem(s) concern integration: breaking text layout into multiple
 runs should your shaper not support multiple fonts (as HarfBuzz doesn't), then
 stitching the result back together.</p>
-<h2><a class="header" href="#kas-text" id="kas-text">KAS-text</a></h2>
+<h2 id="kas-text"><a class="header" href="#kas-text">KAS-text</a></h2>
 <p>The above libraries cover simple layout and rasterisation fairly well, but
 also leave a lot out, especially regarding complex layout and use of formatted
 input texts.</p>
@@ -281,14 +259,14 @@ raw text input to positioned glyphs), admittedly with imperfections.</p>
 Markdown or (simple) HTML input and mostly-automatic font selection.
 Other topics, such as vertical text, font synthesis, font fallbacks and
 emoticons, have not been planned but could eventually be added.</p>
-<h3><a class="header" href="#kas-gui" id="kas-gui">KAS GUI</a></h3>
+<h3 id="kas-gui"><a class="header" href="#kas-gui">KAS GUI</a></h3>
 <p>The v0.5 release of KAS has integration with KAS-text, including a reasonably
 functional multi-line text-editor. <a href="https://github.com/kas-gui/kas/tree/master/kas-wgpu/examples#layout">Check it out</a> or run yourself:</p>
 <pre><code class="language-sh">git clone https://github.com/kas-gui/kas.git
 cd kas/kas-wgpu
 cargo run --example layout --features shaping
 </code></pre>
-<h1><a class="header" href="#line-wrapping-the-hardest-problem-in-text-layout" id="line-wrapping-the-hardest-problem-in-text-layout">Line wrapping: the hardest problem in text layout?</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="line-wrapping-the-hardest-problem-in-text-layout"><a class="header" href="#line-wrapping-the-hardest-problem-in-text-layout">Line wrapping: the hardest problem in text layout?</a></h1>
 <p>September 2020</p>
 <p><em>Obviously</em> the title can't be true. Can it?</p>
 <p>Unicode provides a <del>short</del> somewhat long <a href="https://www.unicode.org/reports/tr14/">technical report on line breaking</a>.
@@ -302,7 +280,7 @@ and optional breaks (roughly speaking, the start of each word).</p>
 implemented in Rust, by the <a href="https://docs.rs/xi-unicode/0.2.1/xi_unicode/"><code>xi-unicode</code></a>
 library (from the same people as <a href="https://github.com/xi-editor/xi-editor">Xi Editor</a>
 and <a href="https://github.com/linebender/druid">Druid</a>).</p>
-<h2><a class="header" href="#one-foot-in-front-of-the-other" id="one-foot-in-front-of-the-other">One foot in front of the other</a></h2>
+<h2 id="one-foot-in-front-of-the-other"><a class="header" href="#one-foot-in-front-of-the-other">One foot in front of the other</a></h2>
 <p><img src="https://www.freetype.org/freetype2/docs/glyphs/metrics.png" alt="glyph metrics" /></p>
 <p>Lets start with the basics: horizontal, left-to-right text with simple layout.
 In this case, we use a <em>caret</em> starting at the line's origin. The first glyph is
@@ -320,7 +298,7 @@ wrapped, they don't actually add space anywhere).</p>
 for most left-to-right languages, provided no complicated layout is needed.</p>
 <p>Actually, there is another point missing from this story: hyphenation.
 We leave this as a foot-note for now.</p>
-<h2><a class="header" href="#shaping-1" id="shaping-1">Shaping</a></h2>
+<h2 id="shaping-1"><a class="header" href="#shaping-1">Shaping</a></h2>
 <p>Shaping was <a href="why-kas-text.html#shaping">discussed previously</a> and is an essential
 part of complex text support: the above advance-and-apply-kerning rules are
 insufficient for ligatures and entirely insufficient for complex texts like Arabic.
@@ -334,7 +312,7 @@ track the positions of optional line-breaks.</p>
 <p>KAS-text implements support for both simple layout (directly) and complex layout
 (via <a href="https://docs.rs/harfbuzz-rs">`harfbuzz-rs</a>) within its
 <a href="https://github.com/kas-gui/kas-text/blob/master/src/shaper.rs">shaper module</a>.</p>
-<h2><a class="header" href="#right-to-left-and-bi-directional-text" id="right-to-left-and-bi-directional-text">Right-to-left and bi-directional text</a></h2>
+<h2 id="right-to-left-and-bi-directional-text"><a class="header" href="#right-to-left-and-bi-directional-text">Right-to-left and bi-directional text</a></h2>
 <p>This is where things start to get <em>fun</em>. When going left-to-right (hereafter
 LTR), we only need to implement the caret position. When going RTL, if only we
 could simply use the same logic but with flipped direction: alas, all font
@@ -381,18 +359,19 @@ direction). On that line one may append a whole run (in either direction) or
 part of a wrapped line — but since the logical end of a line should not be in
 its middle we only allow line wrapping when the run direction matches the line
 direction. [This may need adjustment.]</p>
-<h2><a class="header" href="#summary" id="summary">Summary</a></h2>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
 <p>As we have seen, line-wrapping is only a small problem within the scope of text
 layout, but surprisingly complex in practice due to its inherent
 inseperability from other aspects of text layout.</p>
-<h1><a class="header" href="#easy-cast" id="easy-cast">Easy Cast</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="easy-cast"><a class="header" href="#easy-cast">Easy Cast</a></h1>
 <p>Introducing: <a href="https://crates.io/crates/easy-cast">easy-cast</a>.</p>
-<h2><a class="header" href="#problem-correct-casts-arent-easy" id="problem-correct-casts-arent-easy">Problem: correct casts aren't easy</a></h2>
+<h2 id="problem-correct-casts-arent-easy"><a class="header" href="#problem-correct-casts-arent-easy">Problem: correct casts aren't easy</a></h2>
 <p>Let me ask you, have you ever done this?</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let v: Vec&lt;_&gt; = make_collection();
+</span><span class="boring">fn make_some_vec() -&gt; Vec&lt;u8&gt; { vec![] }
+</span>let v: Vec&lt;_&gt; = make_some_vec();
 
 // We need a fixed-size type (not usize), or just want to save space.
 // We can assume length &lt;= u32::MAX.
@@ -400,10 +379,11 @@ let len = v.len() as u32;
 <span class="boring">}
 </span></code></pre></pre>
 <p>Of course, you could write this instead:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let v: Vec&lt;_&gt; = make_collection();
+</span><span class="boring">fn make_some_vec() -&gt; Vec&lt;u8&gt; { vec![] }
+</span>let v: Vec&lt;_&gt; = make_some_vec();
 
 // We need a fixed-size type (not usize), or just want to save space.
 use std::convert::TryFrom;
@@ -411,21 +391,22 @@ let len = u32::try_from(v.len()).unwrap();
 <span class="boring">}
 </span></code></pre></pre>
 <p>What about this?</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let x: f32 = some_position();
+</span>let x: f32 = 1234.5678;
 
 // Convert to the nearest integer, assuming it fits
 let x = (x.round()) as i32;
+assert_eq!(x, 1235);
 <span class="boring">}
 </span></code></pre></pre>
 <p>Or this?</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use rand_distr::{Poisson, Distribution};
-let distr = Poisson::new(1e6).unwrap();
+let poi = Poisson::new(1e6_f64).unwrap();
 let num = poi.sample(&amp;mut rand::thread_rng());
 
 // Note: u64::MAX as f64 rounds to 2^64, so we need to use &lt; not &lt;= here!
@@ -434,9 +415,10 @@ let num = num as u64;
 <span class="boring">}
 </span></code></pre></pre>
 <p>Or even this?</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">fn some_value() -&gt; i32 { 0 }
 </span>let x: i32 = some_value();
 let y = x as f32;
 if y as i32 == x {
@@ -446,7 +428,7 @@ if y as i32 == x {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<h3><a class="header" href="#summary-1" id="summary-1">Summary</a></h3>
+<h3 id="summary-1"><a class="header" href="#summary-1">Summary</a></h3>
 <p>It should be <em>easy</em> and <em>safe</em> to convert one numeric type to
 another, but frequently it's not:</p>
 <ul>
@@ -461,7 +443,7 @@ operation, yet most solutions require separate rounding and conversion steps.</l
 <p>It turns out this is not an easy problem to solve <em>in general</em>. I wrote
 <a href="https://github.com/rust-lang/rfcs/pull/2484">an RFC</a> on this. Nearly three
 years and a long discussion later, it's still unsolved.</p>
-<h3><a class="header" href="#existing-solutions" id="existing-solutions">Existing solutions</a></h3>
+<h3 id="existing-solutions"><a class="header" href="#existing-solutions">Existing solutions</a></h3>
 <p>The standard library provides:</p>
 <ul>
 <li><code>From</code>, but it only covers portably infallible conversions</li>
@@ -477,7 +459,7 @@ it's a relatively big library if you just want casts</li>
 conversions; API around <code>isize</code> and <code>usize</code> is platform-dependent;
 error handling is the user's responsibility</li>
 </ul>
-<h2><a class="header" href="#introducing-easy-cast" id="introducing-easy-cast">Introducing easy-cast</a></h2>
+<h2 id="introducing-easy-cast"><a class="header" href="#introducing-easy-cast">Introducing easy-cast</a></h2>
 <p>Eventually I gave up trying to find a standard solution and wrote my own,
 starting with one particular problem (converting between <code>usize</code> and <code>u32</code>
 indices in KAS-text, which stores <em>many</em> text and list indices). This tiny
@@ -489,48 +471,51 @@ beginning grew into the <a href="https://crates.io/crates/easy-cast">easy-cast</
 <li><code>try_cast</code> and <code>try_conv</code>, allowing user error handling on all conversions</li>
 <li>and of course a few bug fixes and diagnostic improvements</li>
 </ul>
-<h3><a class="header" href="#examples" id="examples">Examples</a></h3>
+<h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
 <p>Now, we can revisit the above problems using <code>easy-cast</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use easy_cast::Conv;
 
-let v: Vec&lt;_&gt; = make_collection();
+<span class="boring">fn make_some_vec() -&gt; Vec&lt;u8&gt; { vec![] }
+</span>let v: Vec&lt;_&gt; = make_some_vec();
 // Expect success, panic on failure
 let len = u32::conv(v.len());
 <span class="boring">}
 </span></code></pre></pre>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use easy_cast::CastFloat;
 
-let x: f32 = some_position();
+let x: f32 = 1234.5678;
 // Convert to the nearest integer, panic if out-of-range
 let x: i32 = x.cast_nearest();
 <span class="boring">}
 </span></code></pre></pre>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use easy_cast::CastFloat;
 
 use rand_distr::{Poisson, Distribution};
-let distr = Poisson::new(1e6).unwrap();
+let poi = Poisson::new(1e6_f64).unwrap();
 let num = poi.sample(&amp;mut rand::thread_rng());
 
 let num: u64 = num.cast_trunc();
 <span class="boring">}
 </span></code></pre></pre>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use easy_cast::Conv;
 
-let x: i32 = some_value();
-if let Ok(y) = f32::try_conv(x) {
-    println!(&quot;No loss of precision!&quot;);
+<span class="boring">fn some_value() -&gt; i32 { 0 }
+</span>let x: i32 = some_value();
+match f32::try_conv(x) {
+    Ok(y) =&gt; println!(&quot;{x} is exactly representable by f32: {y}&quot;),
+    Err(e) =&gt; println!(&quot;{x} is not representable by f32: {e}&quot;),
 }
 <span class="boring">}
 </span></code></pre></pre>
@@ -546,7 +531,7 @@ if let Ok(y) = f32::try_conv(x) {
 <li><code>T::conv_nearest(x)</code>, etc.</li>
 <li><code>T::try_conv_trunc(x)</code>, <code>x.try_cast_floor()</code>, etc.</li>
 </ul>
-<h3><a class="header" href="#dont-need-the-fuses" id="dont-need-the-fuses">Don't need the fuses?</a></h3>
+<h3 id="dont-need-the-fuses"><a class="header" href="#dont-need-the-fuses">Don't need the fuses?</a></h3>
 <p>One of the design goals for easy-cast was <em>check everything in Debug builds,
 maybe not in Release builds</em>. In a Debug build, or when the <code>always_assert</code>
 crate feature is used, <code>cast</code> and <code>conv</code> will panic on inexact conversions.
@@ -560,59 +545,31 @@ inexact conversions.</p>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                        
-
-                        
-
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-
-                
             </nav>
 
         </div>
 
-        
-
-        
-
-        
-
-        
         <script type="text/javascript">
             window.playground_copyable = true;
         </script>
-        
-
-        
-
-        
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
-
         <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
         <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
-        
-
-        
-        
         <script type="text/javascript">
         window.addEventListener('load', function() {
             window.setTimeout(window.print, 100);
         });
         </script>
-        
-        
-
     </body>
 </html>
