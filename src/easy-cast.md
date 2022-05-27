@@ -6,7 +6,8 @@ Introducing: [easy-cast].
 
 Let me ask you, have you ever done this?
 ```rust
-let v: Vec<_> = make_collection();
+# fn make_some_vec() -> Vec<u8> { vec![] }
+let v: Vec<_> = make_some_vec();
 
 // We need a fixed-size type (not usize), or just want to save space.
 // We can assume length <= u32::MAX.
@@ -14,7 +15,8 @@ let len = v.len() as u32;
 ```
 Of course, you could write this instead:
 ```rust
-let v: Vec<_> = make_collection();
+# fn make_some_vec() -> Vec<u8> { vec![] }
+let v: Vec<_> = make_some_vec();
 
 // We need a fixed-size type (not usize), or just want to save space.
 use std::convert::TryFrom;
@@ -23,16 +25,17 @@ let len = u32::try_from(v.len()).unwrap();
 
 What about this?
 ```rust
-let x: f32 = some_position();
+let x: f32 = 1234.5678;
 
 // Convert to the nearest integer, assuming it fits
 let x = (x.round()) as i32;
+assert_eq!(x, 1235);
 ```
 
 Or this?
 ```rust
 use rand_distr::{Poisson, Distribution};
-let distr = Poisson::new(1e6).unwrap();
+let poi = Poisson::new(1e6_f64).unwrap();
 let num = poi.sample(&mut rand::thread_rng());
 
 // Note: u64::MAX as f64 rounds to 2^64, so we need to use < not <= here!
@@ -42,6 +45,7 @@ let num = num as u64;
 
 Or even this?
 ```rust
+# fn some_value() -> i32 { 0 }
 let x: i32 = some_value();
 let y = x as f32;
 if y as i32 == x {
@@ -108,7 +112,8 @@ Now, we can revisit the above problems using `easy-cast`:
 ```rust
 use easy_cast::Conv;
 
-let v: Vec<_> = make_collection();
+# fn make_some_vec() -> Vec<u8> { vec![] }
+let v: Vec<_> = make_some_vec();
 // Expect success, panic on failure
 let len = u32::conv(v.len());
 ```
@@ -116,7 +121,7 @@ let len = u32::conv(v.len());
 ```rust
 use easy_cast::CastFloat;
 
-let x: f32 = some_position();
+let x: f32 = 1234.5678;
 // Convert to the nearest integer, panic if out-of-range
 let x: i32 = x.cast_nearest();
 ```
@@ -125,7 +130,7 @@ let x: i32 = x.cast_nearest();
 use easy_cast::CastFloat;
 
 use rand_distr::{Poisson, Distribution};
-let distr = Poisson::new(1e6).unwrap();
+let poi = Poisson::new(1e6_f64).unwrap();
 let num = poi.sample(&mut rand::thread_rng());
 
 let num: u64 = num.cast_trunc();
@@ -134,9 +139,11 @@ let num: u64 = num.cast_trunc();
 ```rust
 use easy_cast::Conv;
 
+# fn some_value() -> i32 { 0 }
 let x: i32 = some_value();
-if let Ok(y) = f32::try_conv(x) {
-    println!("No loss of precision!");
+match f32::try_conv(x) {
+    Ok(y) => println!("{x} is exactly representable by f32: {y}"),
+    Err(e) => println!("{x} is not representable by f32: {e}"),
 }
 ```
 
