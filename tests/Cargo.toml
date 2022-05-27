@@ -1,0 +1,12 @@
+[package]
+name = "tests"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+doc-comment = "0.3.3"
+rand = { version = "0.8" }
+rand_distr = "0.4"
+impl-tools = "0.3.1"
+easy-cast = "0.4.4"
