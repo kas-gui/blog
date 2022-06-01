@@ -151,7 +151,7 @@ do this, but still several steps involved:</p>
 <li>Selecting a font: this might be embedded or the app may try to discover a
 &quot;standard&quot; system font. The <code>font-kit</code> crate can discover system fonts.</li>
 <li>Reading the font: there are a selection of libraries available, from the
-low level <code>ttf-parser</code> to the mid-level <code>ab_glyph</code> to more complex toolsets
+low level <code>ttf-parser</code> to the mid-level <code>ab_glyph</code> to more complex tool sets
 including <code>font-kit</code>, <code>rusttype</code> and <code>fontdue</code>.</li>
 <li>Translating the input string to a sequence of positioned and scaled glyphs
 (<em>layout</em>): the above-mentioned <code>font-kit</code>, <code>rusttype</code> and <code>fontdue</code> can
@@ -209,7 +209,7 @@ is insufficient. <em>None</em> of the above libraries support bidirectional text
 <li>using a bold variant (or more generally, adjusting the weight)</li>
 <li>using an italic variant (either via use of another font variant or via
 slanting glyphs during rendering)</li>
-<li>drawing underline or strikethrough</li>
+<li>drawing underline or strike-through</li>
 </ul>
 <p>Some of the above font libraries have limited support for formatting specified
 via a list of text sections each with a font size and font identifier, and in
@@ -327,7 +327,7 @@ specifies the <em>Basic Display Algorithm</em>, which essentially has three part
 indicate RTL direction. This is complex but well specified and implemented
 by libraries such as <a href="http://docs.rs/unicode-bidi">unicode-bidi</a> (albeit
 with bugs).</li>
-<li>Re-order the text. This is complex and inseperable from line-wrapping.</li>
+<li>Re-order the text. This is complex and inseparable from line-wrapping.</li>
 </ol>
 <p>To go into further detail, according to Unicode TR9, re-ordering text involves:</p>
 <ol>
@@ -362,7 +362,7 @@ direction. [This may need adjustment.]</p>
 <h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
 <p>As we have seen, line-wrapping is only a small problem within the scope of text
 layout, but surprisingly complex in practice due to its inherent
-inseperability from other aspects of text layout.</p>
+inseparability from other aspects of text layout.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="easy-cast"><a class="header" href="#easy-cast">Easy Cast</a></h1>
 <p>Introducing: <a href="https://crates.io/crates/easy-cast">easy-cast</a>.</p>
 <h2 id="problem-correct-casts-arent-easy"><a class="header" href="#problem-correct-casts-arent-easy">Problem: correct casts aren't easy</a></h2>
@@ -543,7 +543,7 @@ inexact conversions.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="impl-tools-beyond-derive"><a class="header" href="#impl-tools-beyond-derive">Impl-tools: beyond derive</a></h1>
 <p>Allow me introduce the <a href="https://crates.io/crates/impl-tools">impl-tools</a> crate,
 by discussing the limitations of <code>#[derive]</code>.</p>
-<h3 id="deriving-defualt"><a class="header" href="#deriving-defualt">Deriving <code>Defualt</code>...</a></h3>
+<h3 id="deriving-default"><a class="header" href="#deriving-default">Deriving <code>Default</code>...</a></h3>
 <h4 id="-over-a-method"><a class="header" href="#-over-a-method">... over a method</a></h4>
 <p>Frequently, a type's public API includes a <code>fn new() -&gt; Self</code> constructor, with
 <code>Default</code> implemented over this. <code>impl_default</code> lets us skip some boilerplate:</p>
@@ -567,7 +567,7 @@ let foo = Foo::default();
 <span class="boring">}
 </span></code></pre></pre>
 <h4 id="-for-an-enum"><a class="header" href="#-for-an-enum">... for an enum</a></h4>
-<p>Similarly, we can derive <code>Defualt</code> for enums:</p>
+<p>Similarly, we can derive <code>Default</code> for enums:</p>
 <pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {

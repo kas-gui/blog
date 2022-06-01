@@ -137,7 +137,7 @@
                         <h1 id="impl-tools-beyond-derive"><a class="header" href="#impl-tools-beyond-derive">Impl-tools: beyond derive</a></h1>
 <p>Allow me introduce the <a href="https://crates.io/crates/impl-tools">impl-tools</a> crate,
 by discussing the limitations of <code>#[derive]</code>.</p>
-<h3 id="deriving-defualt"><a class="header" href="#deriving-defualt">Deriving <code>Defualt</code>...</a></h3>
+<h3 id="deriving-default"><a class="header" href="#deriving-default">Deriving <code>Default</code>...</a></h3>
 <h4 id="-over-a-method"><a class="header" href="#-over-a-method">... over a method</a></h4>
 <p>Frequently, a type's public API includes a <code>fn new() -&gt; Self</code> constructor, with
 <code>Default</code> implemented over this. <code>impl_default</code> lets us skip some boilerplate:</p>
@@ -161,7 +161,7 @@ let foo = Foo::default();
 <span class="boring">}
 </span></code></pre></pre>
 <h4 id="-for-an-enum"><a class="header" href="#-for-an-enum">... for an enum</a></h4>
-<p>Similarly, we can derive <code>Defualt</code> for enums:</p>
+<p>Similarly, we can derive <code>Default</code> for enums:</p>
 <pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
