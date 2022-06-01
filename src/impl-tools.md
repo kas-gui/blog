@@ -203,3 +203,23 @@ s.greet("Alex");
 (&s).greet("Bob");
 Box::new("Bob".to_string()).greet("Zoe");
 ```
+
+## Limitations
+
+To conclude this article, let us briefly discuss limitations.
+
+Support other standard traits: should be easy. `#[autoimpl]` currently supports
+only the most-frequently-used subset of traits supported by `#[derive]` (plus
+`Deref` and `DerefMut`). The crate should likely support everything that
+`#[derive]` does by default, and possibly more (see
+[`derive_more`](https://crates.io/crates/derive_more)).
+
+Extensibility: `#[autoimpl]` could be useful for user-defined traits;
+`impl_scope` could be useful for user-defined attribute macros. It would be
+*nice* if these could be extended in the same way as `#[derive]` is, but that is
+impossible (without direct support from Rust itself). Instead, the `impl-tools`
+crate is split in two: `impl-tools-lib` (contains all functionality) and
+`impl-tools` itself (just a thin `proc-macro` driver). An alternative driver
+containing additional functionality may be used instead of `impl-tools`.
+Exemplar: [`kas-macros`](https://github.com/kas-gui/kas/tree/master/crates/kas-macros)
+(from v0.11).
