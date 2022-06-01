@@ -80,7 +80,7 @@ specifies the *Basic Display Algorithm*, which essentially has three parts:
     indicate RTL direction. This is complex but well specified and implemented
     by libraries such as [unicode-bidi](http://docs.rs/unicode-bidi) (albeit
     with bugs).
-3.  Re-order the text. This is complex and inseperable from line-wrapping.
+3.  Re-order the text. This is complex and inseparable from line-wrapping.
 
 To go into further detail, according to Unicode TR9, re-ordering text involves:
 
@@ -118,4 +118,4 @@ direction. [This may need adjustment.]
 
 As we have seen, line-wrapping is only a small problem within the scope of text
 layout, but surprisingly complex in practice due to its inherent
-inseperability from other aspects of text layout.
+inseparability from other aspects of text layout.

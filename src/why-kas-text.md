@@ -18,7 +18,7 @@ do this, but still several steps involved:
 1.  Selecting a font: this might be embedded or the app may try to discover a
     "standard" system font. The `font-kit` crate can discover system fonts.
 2.  Reading the font: there are a selection of libraries available, from the
-    low level `ttf-parser` to the mid-level `ab_glyph` to more complex toolsets
+    low level `ttf-parser` to the mid-level `ab_glyph` to more complex tool sets
     including `font-kit`, `rusttype` and `fontdue`.
 3.  Translating the input string to a sequence of positioned and scaled glyphs
     (*layout*): the above-mentioned `font-kit`, `rusttype` and `fontdue` can
@@ -90,7 +90,7 @@ Formatting may apply one of several effects to text. These include:
 -   using a bold variant (or more generally, adjusting the weight)
 -   using an italic variant (either via use of another font variant or via
     slanting glyphs during rendering)
--   drawing underline or strikethrough
+-   drawing underline or strike-through
 
 Some of the above font libraries have limited support for formatting specified
 via a list of text sections each with a font size and font identifier, and in

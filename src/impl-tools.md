@@ -3,7 +3,7 @@
 Allow me introduce the [impl-tools](https://crates.io/crates/impl-tools) crate,
 by discussing the limitations of `#[derive]`.
 
-### Deriving `Defualt`...
+### Deriving `Default`...
 
 #### ... over a method
 
@@ -28,7 +28,7 @@ let foo = Foo::default();
 
 #### ... for an enum
 
-Similarly, we can derive `Defualt` for enums:
+Similarly, we can derive `Default` for enums:
 ```rust
 #[impl_tools::impl_default(Option::None)]
 pub enum Option<T> {
