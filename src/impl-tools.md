@@ -1,12 +1,34 @@
-# impl-tools
+# Impl-tools: beyond derive
 
 Allow me introduce the [impl-tools](https://crates.io/crates/impl-tools) crate,
 by discussing the limitations of `#[derive]`.
 
-### `Default::default` for an enum
+### Deriving `Defualt`...
 
-Enums often support `Default`, yet we can't use `#[derive]`. It would be nice to
-have an alternative:
+#### ... over a method
+
+Frequently, a type's public API includes a `fn new() -> Self` constructor, with
+`Default` implemented over this. `impl_default` lets us skip some boilerplate:
+```rust
+use impl_tools::impl_default;
+
+#[impl_default(Foo::new())]
+pub struct Foo {
+    // fields here
+}
+
+impl Foo {
+    pub fn new() -> Foo {
+        Foo { /* fields here */ }
+    }
+}
+
+let foo = Foo::default();
+```
+
+#### ... for an enum
+
+Similarly, we can derive `Defualt` for enums:
 ```rust
 #[impl_tools::impl_default(Option::None)]
 pub enum Option<T> {
@@ -18,55 +40,35 @@ pub enum Option<T> {
 let x: Option<std::time::Instant> = Default::default();
 ```
 
-### `Default::default` is a wrapper
-
-Frequently, a type's public API includes a `fn new() -> Self` constructor, with
-`Default` implemented over this; lets skip the boilerplate:
-```rust
-use impl_tools::impl_default;
-use std::ffi::OsString;
-
-#[impl_default(PathBuf::new())]
-pub struct PathBuf {
-    inner: OsString,
-}
-
-impl PathBuf {
-    pub fn new() -> PathBuf {
-        PathBuf { inner: OsString::new() }
-    }
-}
-```
-
-### Non-default values
+#### ... with specified field values
 
 Lets say we want to implement `Default` for a struct with non-default values for
 fields:
 ```rust
 struct CarStats {
-    uses_diesel: bool,
-    fuel_capacity_liters: f32,
     num_doors: u8,
+    fuel_is_diesel: bool,
+    fuel_capacity_liters: f32,
 }
 ```
-Wouldn't it be nice to be able to specify **our** default values in-place?
+Wouldn't it be nice to be able to specify **our** default values in-place? We can, if we re-write using impl-tools:
 ```rust
 use impl_tools::{impl_scope, impl_default};
 
 impl_scope! {
     #[impl_default]
     struct CarStats {
-        uses_diesel: bool,
+        num_doors: u8 = 3,    // specified default value
+        fuel_is_diesel: bool, // no initializer: uses type's default value
         fuel_capacity_liters: f32 = 50.0,
-        num_doors: u8 = 3,
     }
 }
 ```
-Unfortunately, `field: Ty = val` is not valid Rust syntax. Using the
+Note that `field: Ty = val` is not (currently) Rust syntax. The
 [`impl_scope`](https://docs.rs/impl-tools/latest/impl_tools/macro.impl_scope.html)
-macro allows us to get around this limitation.
+macro has special support for this, besides other functionality.
 
-### Skip `Debug` for hidden / unformattable fields
+### Deriving `Debug`: ignoring hidden fields
 
 For example, let us consider [`Lcg64Xsh32`](https://github.com/rust-random/rand/blob/master/rand_pcg/src/pcg64.rs) (also known as [PCG32](https://www.pcg-random.org/)). This is a simple random number generator, and as per [policy of the `RngCore` trait](https://docs.rs/rand/latest/rand/trait.RngCore.html), does not print out internal state in its `Debug` implementation.
 ```rust
@@ -97,9 +99,9 @@ pub struct Lcg64Xsh32 {
 
 (This applies equally to fields which do not themselves implement `Debug`.)
 
-### `Deref`
+### Deriving `Deref`
 
-We can also use `#[autoimpl]` for some traits that `#[derive]` can't support:
+How could we derive `Deref` and `DerefMut`? By *using* a specified field:
 ```rust
 #[impl_tools::autoimpl(Deref, DerefMut using self.animal)]
 struct Named<A> {
@@ -110,37 +112,27 @@ struct Named<A> {
 
 ## Generics
 
-Many an experienced Rustacean will know that `#[derive]` makes some incorrect
+An experienced Rustacean should know that `#[derive]` makes some incorrect
 assumptions with regards to generics. For example,
 ```rust,ignore
-use std::fmt;
-use std::marker::PhantomData;
-
-/// Implements Debug where T: Debug (correct)
-#[derive(Debug)]
+/// Implements Clone where T: Clone (correct)
+#[derive(Clone)]
 enum Option<T> {
     None,
     Some(T),
 }
 
-/// Implements Debug where T: Debug (unnecessary bound)
-#[derive(Debug)]
-struct HiddenTy<T> {
-    _pd: PhantomData<T>,
+/// Implements Clone where T: Clone (unnecessary bound)
+#[derive(Clone)]
+struct Shared<T> {
+    inner: std::rc::Rc<T>,
 }
 
-// Some type with its own ideas of how to implement Debug
-struct Foo<T>(T);
-impl<T: fmt::Display> fmt::Debug for Foo<T> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Foo({})", &self.0)
-    }
-}
-
-/// Implements Debug where T: Debug (error: should use bound T: Display)
-#[derive(Debug)]
-struct S<T> {
-    foo: Foo<T>,
+/// Attempts to implement Clone where T: Clone
+/// (error: Clone for Cell<T> requires T: Copy)
+#[derive(Clone)]
+struct InnerMutable<T> {
+    inner: std::cell::Cell<T>,
 }
 ```
 
@@ -148,27 +140,19 @@ The `#[autoimpl]` macro takes a different approach: do not assume any bounds,
 but allow explicit listing of bounds as required.
 ```rust
 use impl_tools::autoimpl;
-use std::fmt;
-use std::marker::PhantomData;
 
-// autoimpl does not currently support enums: issue #6
+// Note: autoimpl does not currently support enums (issue #6)
 
-#[autoimpl(Debug)]
-struct HiddenTy<T> {
-    _pd: PhantomData<T>,
+// No bound on T assumed
+#[autoimpl(Clone)]
+struct Shared<T> {
+    inner: std::rc::Rc<T>,
 }
 
-// Some type with its own ideas of how to implement Debug
-struct Foo<T>(T);
-impl<T: fmt::Display> fmt::Debug for Foo<T> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Foo({})", &self.0)
-    }
-}
-
-#[autoimpl(Debug where T: fmt::Display)]
-struct S<T> {
-    foo: Foo<T>,
+// Explicit bound on T
+#[autoimpl(Clone where T: Copy)]
+struct InnerMutable<T> {
+    inner: std::cell::Cell<T>,
 }
 ```
 
@@ -177,5 +161,45 @@ are implemented simultaneously, the keyword `trait` may be used as a bound:
 ```rust
 # use impl_tools::autoimpl;
 #[autoimpl(Clone, Debug, Default where T: trait)]
-struct S<T>(T);
+struct Wrapper<T>(T);
+```
+
+## Auto trait implementations
+
+Lets say you write a trait, and wish to implement that trait for reference types:
+```rust
+trait Greet {
+    fn greet(&self, name: &str);
+}
+
+impl<T: Greet + ?Sized> Greet for &T {
+    fn greet(&self, name: &str) {
+        (*self).greet(name);
+    }
+}
+
+// Also impl for &mut T, Box<T>, ...
+```
+This can be quite tedious, enough so that macros (by example) are often used to
+deduplicate the implementations. But why should we have to write even
+*the first* implementation? It's all trivial code!
+```rust
+use impl_tools::autoimpl;
+
+// One line to do it all:
+#[autoimpl(for<T: trait + ?Sized> &T, &mut T, Box<T>)]
+trait Greet {
+    fn greet(&self, name: &str);
+}
+
+// A test, just to prove it works:
+impl Greet for String {
+    fn greet(&self, name: &str) {
+        println!("Hi {name}, my name is {self}!");
+    }
+}
+let s = "Zoe".to_string();
+s.greet("Alex");
+(&s).greet("Bob");
+Box::new("Bob".to_string()).greet("Zoe");
 ```

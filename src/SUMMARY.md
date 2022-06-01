@@ -4,4 +4,4 @@
 - [Why KAS-text](why-kas-text.md)
 - [Line wrapping](line-wrapping.md)
 - [Easy Cast](easy-cast.md)
-- [impl-tools](impl-tools.md)
+- [Impl-tools: beyond derive](impl-tools.md)
