@@ -116,16 +116,14 @@ In case you hadn't guessed already, I like lists:
 -   Exactly a year later, v0.11 heavily revised the `Widget` traits and
     supporting macros, supported declarative complex static layout within
     widgets, plus many more small changes all aimed at making KAS easier to use.
--   Likely v0.12 will be released soon making use of Rust's recent support for
-    Generic Associated Types thus reducing usage of `unsafe` and unstable
-    interfaces.
+-   I have just released v0.12 which uses Rust's recent support for Generic
+    Associated Types to update temporary APIs.
 
-To state the obvious, KAS isn't very popular despite being one of the more
-capable Rust toolkits. Despite this, it compares well on features, missing a
-few (such as screen-reader support and *dynamic* declarative layout), but also
-supporting some less common ones, such as complex text formatting (currently
-limited to web frameworks, bindings, Druid and KAS) and fast momentum touch
-scrolling over large data models.
+To state the obvious, KAS isn't very popular. Despite this, it compares well
+with other Rust toolkits on features, missing a few (such as screen-reader
+support and *dynamic* declarative layout), but also supporting some less common
+ones, such as complex text formatting (currently limited to web frameworks,
+bindings, Druid and KAS) and fast momentum touch scrolling over large data models.
 
 My main concerns regarding KAS are:
 
@@ -150,8 +148,10 @@ From another point of view, KAS has had several successes:
 -   Not too hard to use for non-dynamic layout (if you tried KAS v0.10 or
     earlier, usability is much improved, and certainly much better than
     traditional toolkits like GTK or Win32)
--   The [easy-cast](https://crates.io/crates/easy-cast) and
-    [impl-tools](https://crates.io/crates/impl-tools) crates are both spin-offs
+-   The [easy-cast](https://crates.io/crates/easy-cast) library
+-   I learned a plenty about proc-macros, resulting in a rather interesting
+    method of implementing the [`Widget`](https://docs.rs/kas/latest/kas/trait.Widget.html)
+    trait and the [impl-tools](https://crates.io/crates/impl-tools) library.
 
 Future work, if I feel so inspired, may involve the following:
 
@@ -279,8 +279,8 @@ Then there is drawing highlighting and underlines, and if you're still looking
 for things to do, correctly justifying Arabic texts (by extending words) and
 gapping underlines around descenders.
 
-Right, what do we have? We really have to thank @RazrFalcon for his efforts
-including [ttf-parser](https://github.com/RazrFalcon/ttf-parser),
+Right, what do we have? We really have to thank Yevhenii Reizner (@RazrFalcon)
+for his efforts including [ttf-parser](https://github.com/RazrFalcon/ttf-parser),
 [fontdb](https://github.com/RazrFalcon/fontdb/) and
 [rustybuzz](https://github.com/RazrFalcon/rustybuzz)
 (not to mention [tiny-skia]!). We have several libraries for rendering and
