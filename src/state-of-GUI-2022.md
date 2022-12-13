@@ -10,7 +10,6 @@ Contents:
 -   [Categorised listing of toolkits](#categorised-listing-of-toolkits)
 -   [State of KAS](#state-of-kas)
 -   [State of GUI](#state-of-gui)
--   [State of Rust](#state-of-rust)
 
 ## Categorised listing of toolkits
 
@@ -330,24 +329,6 @@ We now have a few libraries on these topics:
     [Project Fluent](https://projectfluent.org/)"
 -   [`gettext-rs`](https://crates.io/crates/gettext-rs), "Safe bindings for
     gettext"
-
-
-## State of Rust
-
-I'd like to conclude with a short note on the state of Rust at the end of 2022.
-At the type level, this year saw the completion of one of the most impactful
-features in years: Generic Associated Types (GATs).
-
-What is next? The "missing feature" I bump into most often with Rust is without
-a doubt specialization. This perspective may be a little unfair however, since
-any form of trait implementation overlap has been pushed under this umbrella.
-This little omission has wide ranging impacts; for example `AsRef<T>` has no
-blanket impl for `T`, and `TryFrom` is not a super-set of the capabilities of
-`From`.
-
-While I don't expect *specialization* to be solved within 2023 (though it would
-certainly be nice!), I would love to see further progress on the Chalk and
-Polonius projects.
 
 [KAS]: https://github.com/kas-gui/kas
 [winit]: https://github.com/rust-windowing/winit/
