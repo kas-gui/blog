@@ -214,8 +214,9 @@ renderer and window manager used, supporting some alternatives to Winit:
 -   Tauri maintains [TAO], a fork of winit with deeper GTK integration, most
     notably to support [WRY] via [WebKitGTK](https://webkitgtk.org/).
 -   Druid has its own [`druid-shell`](https://docs.rs/druid-shell/latest/druid_shell/)
-    library designed for use with [Piet], but thanks to support for
-    [`raw-window-handle`] it should also be usable with other renderers.
+    library designed for use with [Piet] (also supporting [`raw-window-handle`])
+-   [Glazier](https://github.com/linebender/glazier) is a new project (also by
+    the Druid team) for a GUI-oriented alternative to Winit
 -   We don't have to use Rust! Some of toolkits above, even those considered
     Rust toolkits like Slint and Relm4, make use of GTK or Qt for platform
     integration and rendering.
@@ -308,6 +309,8 @@ to type-set and render text, what libraries are out there?
     leveraging fontdb, rustybuzz, Swash and other Rust font libraries.
     It seems we can finally have high-quality pure-Rust type-setting.
     Thanks System76!
+-   [parley](https://github.com/dfrg/parley) is a nascent project by Chad Brokaw
+    (the author of Swash) for rich text layout, intended for usage with Piet
 
 
 ### Accessibility and internationalisation
