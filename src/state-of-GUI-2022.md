@@ -248,7 +248,8 @@ Several Rust toolkits add their own high-level rendering libraries:
 -   [WRY] is a rendering layer over platform-dependent WebView backends
 -   [Piet] is Druid's rendering layer, leveraging system libraries especially
     for complex font support
--   [Piet-GPU](https://github.com/linebender/piet-gpu) is a research project
+-   [Vello](https://github.com/linebender/vello), formerly known as Piet-GPU,
+    is a research project
     to construct a high-level GPU-accelerated rendering layer
 -   [Kurbo](https://crates.io/crates/kurbo) is used by Piet for drawing curves
     and paths
