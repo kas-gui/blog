@@ -18,7 +18,7 @@ jobs:
       url: https://kas-gui.github.io/blog/
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup mdBook
         uses: peaceiris/actions-mdbook@v1
